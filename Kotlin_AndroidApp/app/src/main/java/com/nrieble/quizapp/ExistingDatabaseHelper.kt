@@ -3,10 +3,10 @@ package com.nrieble.quizapp
 import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
-import android.database.sqlite.SQLiteException
 import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
-import java.io.*
+import java.io.File
+import java.io.FileOutputStream
 
 //credits belong to https://stackoverflow.com/users/1749684/dardan - https://stackoverflow.com/questions/22627215/how-to-put-database-and-read-database-from-assets-folder-android-which-are-creat#22627776
 
@@ -65,8 +65,8 @@ class DBHelper(private val context: Context) : SQLiteOpenHelper(context, dbName,
                 "Question.ID, " +
                 "Question.Text, " +
                 "Question.Image, " +
-                "group_concat(Answer.Text, ',') as Options, " +
-                "group_concat(Answer.True, ',') as Truth " +
+                "group_concat(Answer.Text, '#') as Options, " +
+                "group_concat(Answer.True, '#') as Truth " +
                 "from Question " +
                 "inner join Answer on Answer.QuestionID = Question.ID " +
                 "group by Question.ID, Question.Text, Question.Image "
@@ -75,8 +75,8 @@ class DBHelper(private val context: Context) : SQLiteOpenHelper(context, dbName,
         if (c.moveToFirst()) {
             do {
                 val question = c.getString(c.getColumnIndex("Text"))
-                val options = c.getString(c.getColumnIndex("Options")).split(",")
-                val truth = c.getString(c.getColumnIndex("Truth")).split(",").map { it.equals("1") }
+                val options = c.getString(c.getColumnIndex("Options")).split("#")
+                val truth = c.getString(c.getColumnIndex("Truth")).split("#").map { it.equals("1") }
                 val id = c.getString(c.getColumnIndex("ID")).toInt()
                 val image = c.getString(c.getColumnIndex("Image"))
                 var q = Question(

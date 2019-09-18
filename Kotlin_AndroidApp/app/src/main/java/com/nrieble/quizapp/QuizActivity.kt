@@ -59,7 +59,7 @@ class QuizActivity : AppCompatActivity() {
         buttonConfirmNext.setOnClickListener {
             //if the button has not been clicked before and at least one answer is clicked
             if (!answered) {
-                if (true) {
+                if ((currentQuestion.selection.contains(true))) {
                     checkAnswer()
                 } else {
                     Toast.makeText(this, "Please select an answer", Toast.LENGTH_SHORT).show()
