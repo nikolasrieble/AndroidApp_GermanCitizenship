@@ -11,9 +11,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdView
 
 class QuizActivity : AppCompatActivity() {
     val EXTRA_SCORE = "extraScore"
+
+    //ad related
+    private lateinit var  mAdView: AdView
 
     //layout
     private lateinit var textViewQuestion: TextView
@@ -40,6 +45,11 @@ class QuizActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_quiz)
+
+        //ad related
+        mAdView = findViewById<AdView>(R.id.adView);
+        val adRequest = AdRequest.Builder().build()
+        mAdView.loadAd(adRequest);
 
         imageViewQuestion = findViewById(R.id.imageView)
         textViewQuestion = findViewById(R.id.text_view_question)

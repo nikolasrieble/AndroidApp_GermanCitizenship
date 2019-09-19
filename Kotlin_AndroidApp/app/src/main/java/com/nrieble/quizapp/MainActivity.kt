@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.gms.ads.MobileAds
 
 class MainActivity : AppCompatActivity() {
     private val REQUEST_CODE_QUIZ = 1
@@ -20,6 +21,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.starting_screen)
+
+        MobileAds.initialize(this)
 
         textViewHighscore = findViewById(R.id.text_view_highscore)
         loadHighscore()
