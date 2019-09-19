@@ -1,12 +1,15 @@
 package com.nrieble.quizapp
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
@@ -19,6 +22,7 @@ class QuizActivity : AppCompatActivity() {
     private lateinit var textViewCount: TextView
     private lateinit var textViewCountdown: TextView
     private lateinit var buttonConfirmNext: Button
+    private lateinit var imageViewQuestion: ImageView
 
     private lateinit var recyclerView: RecyclerView
 
@@ -38,6 +42,7 @@ class QuizActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_quiz)
 
+        imageViewQuestion = findViewById(R.id.imageView)
         textViewQuestion = findViewById(R.id.text_view_question)
         textViewScore = findViewById(R.id.text_view_score)
 
@@ -45,6 +50,7 @@ class QuizActivity : AppCompatActivity() {
         textViewCountdown = findViewById(R.id.text_view_countdown)
         buttonConfirmNext = findViewById(R.id.button_next_question)
         recyclerView = findViewById(R.id.my_recycler_view)
+        recyclerView.layoutManager = LinearLayoutManager(this)
 
         /*val dbhelper = DatabaseHelper(context = this)
         questionList = dbhelper.getAllQuestions()*/
@@ -75,12 +81,26 @@ class QuizActivity : AppCompatActivity() {
 
             //get next question
             this.currentQuestion = questionList[questionCounter]
-            //setup layout
+            //setup question text
             textViewQuestion.text = currentQuestion.question
-
-            recyclerView.layoutManager = LinearLayoutManager(this)
+            //setup answer options
             recyclerView.adapter = AnswerAdapter(this.currentQuestion, this)
+            //setup image
 
+            if (currentQuestion.image != "None") {
+                val image_name = currentQuestion.image.takeLast(7).take(3)
+                val image = ContextCompat.getDrawable(
+                    this,
+                    this.resources.getIdentifier(
+                        "q" + image_name,
+                        "drawable",
+                        this.packageName
+                    )
+                )
+                imageViewQuestion.setImageDrawable(image)
+            } else imageViewQuestion.setImageDrawable(null)
+
+            // update counter
             questionCounter += 1
             textViewCount.text = "Question: " + questionCounter + "/" + questionCountTotal
 
@@ -113,6 +133,7 @@ class QuizActivity : AppCompatActivity() {
             finishQuiz()
         } else {
             Toast.makeText(this, "Press back again to quit", Toast.LENGTH_SHORT)
+
         }
         backPressedTime = System.currentTimeMillis()
     }
