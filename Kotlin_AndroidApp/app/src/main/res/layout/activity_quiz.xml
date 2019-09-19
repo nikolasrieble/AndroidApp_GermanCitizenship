@@ -1,60 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:padding="16dp"
     tools:context=".MainActivity">
 
-    <TextView
-        android:id="@+id/text_view_score"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Score: 0"
-        android:textColor="@color/colorPrimary"></TextView>
-
-    <TextView
-        android:id="@+id/text_view_count"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/text_view_score"
-        android:text="Question: 1/x"
-        android:textColor="@color/colorPrimary"></TextView>
-
-    <TextView
-        android:id="@+id/text_view_countdown"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:text="00:30"
-        android:textColor="@color/colorPrimary"
-        android:textSize="40dp"></TextView>
-
-    <TextView
-        android:id="@+id/text_view_question"
+    <LinearLayout
+        android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/text_view_countdown"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="80dp"
-        android:text="This is a question. You will have to choose the right answer"
-        android:textColor="@color/colorPrimary"
-        android:textSize="20dp"></TextView>
+        android:layout_height="20sp"
+        android:orientation="horizontal">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/my_recycler_view"
+        <TextView
+            android:id="@+id/text_view_score"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Score: 0"
+            android:textColor="@color/colorPrimary"></TextView>
+
+        <TextView
+            android:id="@+id/text_view_countdown"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text=""
+            android:textColor="@color/colorPrimary"></TextView>
+
+        <TextView
+            android:id="@+id/text_view_count"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Question: 1/x"
+            android:textColor="@color/colorPrimary"></TextView>
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/button_next_question"
-        android:layout_below="@id/text_view_question"
-        android:scrollbars="vertical" />
+        android:orientation="vertical"
+        android:weightSum="15">
 
-    <Button
-        android:id="@+id/button_next_question"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginTop="16dp"
-        android:background="@color/colorPrimary"
-        android:text="Confirm"></Button>
-</RelativeLayout>
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="0sp"
+            android:layout_weight="4"
+            android:contentDescription="ImageToQuestion"
+            tools:srcCompat="@tools:sample/avatars"></ImageView>
+
+        <TextView
+            android:id="@+id/text_view_question"
+            android:layout_width="match_parent"
+            android:layout_height="0sp"
+            android:layout_weight="4"
+            android:text="This is a question. You will have to choose the right answer"
+            android:textColor="@color/colorPrimary"
+            android:textSize="20sp"></TextView>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/my_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="0sp"
+            android:layout_weight="6"
+            android:scrollbars="vertical">
+
+        </androidx.recyclerview.widget.RecyclerView>
+
+        <Button
+            android:id="@+id/button_next_question"
+            android:layout_width="match_parent"
+            android:layout_height="0sp"
+            android:layout_weight="1"
+            android:background="@color/colorPrimary"
+            android:text="Confirm"></Button>
+    </LinearLayout>
+
+
+</LinearLayout>
