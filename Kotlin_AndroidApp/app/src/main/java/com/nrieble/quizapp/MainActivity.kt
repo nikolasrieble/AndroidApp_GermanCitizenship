@@ -24,12 +24,12 @@ class MainActivity : AppCompatActivity() {
         textViewHighscore = findViewById(R.id.text_view_highscore)
         loadHighscore()
 
-        var buttonStartQuiz = findViewById<Button>(R.id.button_start_quiz)
+        val buttonStartQuiz = findViewById<Button>(R.id.button_start_quiz)
         buttonStartQuiz.setOnClickListener { startQuiz() }
     }
 
     fun startQuiz() {
-        var intent = Intent(this, QuizActivity::class.java)
+        val intent = Intent(this, QuizActivity::class.java)
         startActivityForResult(intent, REQUEST_CODE_QUIZ)
     }
 
@@ -49,12 +49,12 @@ class MainActivity : AppCompatActivity() {
     private fun loadHighscore() {
         highscore =
             getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE).getFloat(KEY_HIGHSCORE, 0.0F)
-        textViewHighscore.text = "Highscore: " + highscore
+        textViewHighscore.text = "Highscore: $highscore"
     }
 
     private fun updateHighscore(score: Float) {
         this.highscore = score
-        textViewHighscore.text = "Highscore: " + highscore
+        textViewHighscore.text = "Highscore: $highscore"
 
         val editor = getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE).edit()
         editor.putFloat(KEY_HIGHSCORE, highscore).apply()

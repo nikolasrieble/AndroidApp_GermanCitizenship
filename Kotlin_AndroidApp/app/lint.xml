@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lint>
+    <issue id="UnusedResources">
+        <ignore path="src/main/res/drawable/q187.png" />
+        <ignore path="src/main/res/drawable/q187.png" />
+        <ignore path="src/main/res/drawable/q187.png" />
+    </issue>
+</lint>

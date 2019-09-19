@@ -5,13 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
-import android.widget.CompoundButton
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.answer_view.view.*
 
 
-class AnswerAdapter(currentQuestion: Question, val context: Context) :
+class AnswerAdapter(currentQuestion: Question, private val context: Context) :
     RecyclerView.Adapter<AnswerAdapter.MyViewHolder>() {
 
     var currentQuestion = currentQuestion
@@ -22,7 +21,7 @@ class AnswerAdapter(currentQuestion: Question, val context: Context) :
     // Each data item is just a string in this case that is shown in a TextView.
     class MyViewHolder(var view: View) :
         RecyclerView.ViewHolder(view) {
-        var selectionState = view.findViewById<CheckBox>(R.id.checkbox)
+        var selectionState = view.findViewById<CheckBox>(R.id.checkbox)!!
     }
 
     // Create new views (invoked by the layout manager)
@@ -35,7 +34,7 @@ class AnswerAdapter(currentQuestion: Question, val context: Context) :
                 false
             )
         )
-        viewHolder.selectionState.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { buttonView, isChecked ->
+        viewHolder.selectionState.setOnCheckedChangeListener({ _, isChecked ->
             val index = currentQuestion.options.indexOf(viewHolder.view.answerText.text)
             if (index >= 0) {
                 currentQuestion.selection[index] = isChecked

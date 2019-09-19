@@ -1,7 +1,6 @@
 package com.nrieble.quizapp
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
@@ -34,7 +33,7 @@ class QuizActivity : AppCompatActivity() {
     private var questionCounter: Int = 0
     private var questionCountTotal: Int = 0
     var score: Float = 0.0F
-    var answered: Boolean = false
+    private var answered: Boolean = false
     private var backPressedTime: Long = 0
 
 
@@ -51,9 +50,6 @@ class QuizActivity : AppCompatActivity() {
         buttonConfirmNext = findViewById(R.id.button_next_question)
         recyclerView = findViewById(R.id.my_recycler_view)
         recyclerView.layoutManager = LinearLayoutManager(this)
-
-        /*val dbhelper = DatabaseHelper(context = this)
-        questionList = dbhelper.getAllQuestions()*/
 
         val dbhelper = DBHelper(context = this)
         questionList = dbhelper.getAllQuestions()
@@ -88,11 +84,11 @@ class QuizActivity : AppCompatActivity() {
             //setup image
 
             if (currentQuestion.image != "None") {
-                val image_name = currentQuestion.image.takeLast(7).take(3)
+                val imageName = currentQuestion.image.takeLast(7).take(3)
                 val image = ContextCompat.getDrawable(
                     this,
                     this.resources.getIdentifier(
-                        "q" + image_name,
+                        "q$imageName",
                         "drawable",
                         this.packageName
                     )
@@ -102,7 +98,7 @@ class QuizActivity : AppCompatActivity() {
 
             // update counter
             questionCounter += 1
-            textViewCount.text = "Question: " + questionCounter + "/" + questionCountTotal
+            textViewCount.text = "Question: $questionCounter/$questionCountTotal"
 
             answered = false
             buttonConfirmNext.text = "Next Question"
@@ -118,11 +114,11 @@ class QuizActivity : AppCompatActivity() {
         recyclerView.adapter = AnswerAdapter(this.currentQuestion, this)
         //count score if correct
         score += this.currentQuestion.score()
-        textViewScore.text = "Score: " + score.toString()
+        textViewScore.text = "Score: $score"
     }
 
-    fun finishQuiz() {
-        var resultIntent = Intent()
+    private fun finishQuiz() {
+        val resultIntent = Intent()
         resultIntent.putExtra(EXTRA_SCORE, score)
         setResult(Activity.RESULT_OK, resultIntent)
         finish()
@@ -132,7 +128,7 @@ class QuizActivity : AppCompatActivity() {
         if (backPressedTime + 2000 > System.currentTimeMillis()) {
             finishQuiz()
         } else {
-            Toast.makeText(this, "Press back again to quit", Toast.LENGTH_SHORT)
+            Toast.makeText(this, "Press back again to quit", Toast.LENGTH_SHORT).show()
 
         }
         backPressedTime = System.currentTimeMillis()
