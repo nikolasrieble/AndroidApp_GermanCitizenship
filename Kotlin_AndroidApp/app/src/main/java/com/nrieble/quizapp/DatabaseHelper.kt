@@ -61,6 +61,7 @@ class DBHelper(private val context: Context) : SQLiteOpenHelper(context, dbName,
                 "Question.ID, " +
                 "Question.Text, " +
                 "Question.Image, " +
+                "Question.Category, " +
                 "group_concat(Answer.Text, '#') as Options, " +
                 "group_concat(Answer.True, '#') as Truth " +
                 "from Question " +
@@ -74,13 +75,15 @@ class DBHelper(private val context: Context) : SQLiteOpenHelper(context, dbName,
                 val options = c.getString(c.getColumnIndex("Options")).split("#")
                 val truth = c.getString(c.getColumnIndex("Truth")).split("#").map { it == "1" }
                 val id = c.getString(c.getColumnIndex("ID")).toInt()
+                val category = c.getString(c.getColumnIndex("Category"))
                 val image = c.getString(c.getColumnIndex("Image"))
                 val q = Question(
                     question,
                     options,
                     truth,
                     id,
-                    image
+                    image,
+                    category
                 )
                 question_list.add(q)
             } while (c.moveToNext())
@@ -96,7 +99,7 @@ class DBHelper(private val context: Context) : SQLiteOpenHelper(context, dbName,
     }
 
     companion object {
-        private const val dbName = "GermanCitizenship.db"
+        private const val dbName = "AllGermanCitizenship.db"
     }
 
 }

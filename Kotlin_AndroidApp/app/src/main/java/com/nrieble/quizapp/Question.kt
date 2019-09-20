@@ -5,7 +5,8 @@ class Question(
     val options: List<String>,
     val truth: List<Boolean>,
     val id: Int,
-    val image: String
+    val image: String,
+    val category: String
 ) {
     var selection = BooleanArray(options.size).toMutableList()
     var disclosure = false
