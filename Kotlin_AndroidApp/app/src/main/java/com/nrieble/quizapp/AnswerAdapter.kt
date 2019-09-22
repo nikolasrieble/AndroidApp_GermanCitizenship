@@ -34,12 +34,29 @@ class AnswerAdapter(currentQuestion: Question, private val context: Context) :
                 false
             )
         )
-        viewHolder.selectionState.setOnCheckedChangeListener({ _, isChecked ->
-            val index = currentQuestion.options.indexOf(viewHolder.view.answerText.text)
+        viewHolder.selectionState.setOnCheckedChangeListener { _, isChecked ->
+            val index = currentQuestion.options.indexOf(viewHolder.view.checkbox.text)
             if (index >= 0) {
                 currentQuestion.selection[index] = isChecked
             }
-        })
+            if (isChecked) {
+                viewHolder.view.setBackgroundColor(
+                    ContextCompat.getColor(
+                        context,
+                        R.color.primaryColor
+                    )
+                )
+            }
+            else {
+                viewHolder.view.setBackgroundColor(
+                    ContextCompat.getColor(
+                        context,
+                        R.color.surfaceColor
+                    )
+                )
+            }
+
+        }
 
         return viewHolder
 
@@ -53,19 +70,19 @@ class AnswerAdapter(currentQuestion: Question, private val context: Context) :
         //save selection
         holder.view.checkbox.isChecked = currentQuestion.selection[position]
         //show answer text
-        holder.view.answerText.text = currentQuestion.options[position]
+        holder.view.checkbox.text = currentQuestion.options[position]
 
         //if DISCLOSURE, evaluate answers by color
         if (currentQuestion.disclosure) {
             if (currentQuestion.truth[position])
-                holder.view.answerText.setTextColor(
+                holder.view.checkbox.setBackgroundColor(
                     ContextCompat.getColor(
                         context,
-                        R.color.colorCorrectAnswer
+                        R.color.primaryDarkColor
                     )
                 )
             else if (currentQuestion.selection[position] and !currentQuestion.truth[position]) {
-                holder.view.answerText.setTextColor(
+                holder.view.checkbox.setBackgroundColor(
                     ContextCompat.getColor(
                         context,
                         R.color.colorFalseAnswer

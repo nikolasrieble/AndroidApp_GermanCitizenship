@@ -9,25 +9,14 @@
     android:layout_marginEnd="2sp"
     android:layout_marginRight="2sp"
     android:layout_marginBottom="2sp"
-    android:background="@drawable/round_corners_background"
+    android:background="@color/surfaceColor"
     android:fadingEdge="horizontal"
     android:orientation="horizontal">
 
     <CheckBox
         android:id="@+id/checkbox"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:focusable="auto" />
-
-    <TextView
-        android:id="@+id/answerText"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_toEndOf="@id/space"
-        android:gravity="center_vertical" />
-
-    <Space
-        android:id="@+id/space"
-        android:layout_width="30sp"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:text="CheckBox" />
 </RelativeLayout>

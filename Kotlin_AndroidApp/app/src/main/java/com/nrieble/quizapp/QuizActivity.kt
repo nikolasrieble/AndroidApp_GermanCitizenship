@@ -35,7 +35,7 @@ class QuizActivity : AppCompatActivity() {
     private lateinit var currentQuestion: Question
 
     //interaction
-    private var questionCounter: Int = 0
+    private var questionCounter: Int = 20
     private var questionCountTotal: Int = 0
     var score: Float = 0.0F
     private var answered: Boolean = false
@@ -58,7 +58,7 @@ class QuizActivity : AppCompatActivity() {
         textViewCount = findViewById(R.id.text_view_count)
         textViewCountdown = findViewById(R.id.text_view_countdown)
         buttonConfirmNext = findViewById(R.id.button_next_question)
-        recyclerView = findViewById(R.id.my_recycler_view)
+        recyclerView = findViewById(R.id.AnswerRecyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
         val dbhelper = DBHelper(context = this)
