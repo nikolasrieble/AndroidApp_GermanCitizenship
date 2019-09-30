@@ -1,6 +1,7 @@
 package com.nrieble.quizapp
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
@@ -35,7 +36,7 @@ class QuizActivity : AppCompatActivity() {
     private lateinit var currentQuestion: Question
 
     //interaction
-    private var questionCounter: Int = 20
+    private var questionCounter: Int = 0
     private var questionCountTotal: Int = 0
     var score: Float = 0.0F
     private var answered: Boolean = false
@@ -57,13 +58,15 @@ class QuizActivity : AppCompatActivity() {
 
         textViewCount = findViewById(R.id.text_view_count)
         textViewCountdown = findViewById(R.id.text_view_countdown)
-        buttonConfirmNext = findViewById(R.id.button_next_question)
+        buttonConfirmNext = findViewById(R.id.ConfirmAnswer)
         recyclerView = findViewById(R.id.AnswerRecyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
         val dbhelper = DBHelper(context = this)
         questionList = dbhelper.getAllQuestions()
         questionCountTotal = questionList.size
+
+        questionCounter = loadLastQuestion() - 1
 
 
         showNextQuestion()
@@ -83,38 +86,39 @@ class QuizActivity : AppCompatActivity() {
     }
 
     private fun showNextQuestion() {
-        if (questionCounter < questionCountTotal) {
+        //restart from 0 if all questions have been answered
+        if (questionCounter >= questionCountTotal){questionCounter = 0}
 
-            //get next question
-            this.currentQuestion = questionList[questionCounter]
-            //setup question text
-            textViewQuestion.text = currentQuestion.question
-            //setup answer options
-            recyclerView.adapter = AnswerAdapter(this.currentQuestion, this)
-            //setup image
+        //get next question
+        this.currentQuestion = questionList[questionCounter]
+        //setup question text
+        textViewQuestion.text = currentQuestion.question
+        //setup answer options
+        recyclerView.adapter = AnswerAdapter(this.currentQuestion, this)
+        //setup image
 
-            if (currentQuestion.image != "None") {
-                val imageName = currentQuestion.image.takeLast(7).take(3)
-                val image = ContextCompat.getDrawable(
-                    this,
-                    this.resources.getIdentifier(
-                        "q$imageName",
-                        "drawable",
-                        this.packageName
-                    )
+        if (currentQuestion.image != "None") {
+            val imageName = currentQuestion.image.takeLast(7).take(3)
+            val image = ContextCompat.getDrawable(
+                this,
+                this.resources.getIdentifier(
+                    "q$imageName",
+                    "drawable",
+                    this.packageName
                 )
-                imageViewQuestion.setImageDrawable(image)
-            } else imageViewQuestion.setImageDrawable(null)
+            )
+            imageViewQuestion.setImageDrawable(image)
+        } else imageViewQuestion.setImageDrawable(null)
 
-            // update counter
-            questionCounter += 1
-            textViewCount.text = "Question: $questionCounter/$questionCountTotal"
+        // update counter
+        questionCounter += 1
+        textViewCount.text = "Question: $questionCounter/$questionCountTotal"
 
-            answered = false
-            buttonConfirmNext.text = "Next Question"
-        } else {
-            finishQuiz()
-        }
+        //update shared prefs
+        updateLastQuestion(questionCounter)
+
+        answered = false
+        buttonConfirmNext.text = "Next Question"
     }
 
     private fun checkAnswer() {
@@ -142,6 +146,15 @@ class QuizActivity : AppCompatActivity() {
 
         }
         backPressedTime = System.currentTimeMillis()
+    }
+
+    private fun updateLastQuestion(questionNumber: Int) {
+        val editor = getApplicationContext().getSharedPreferences("sharedPrefs", Context.MODE_PRIVATE).edit()
+        editor.putInt("LastQuestionNumber", questionNumber).apply()
+    }
+
+    private fun loadLastQuestion():Int {
+        return getApplicationContext().getSharedPreferences("sharedPrefs", Context.MODE_PRIVATE).getInt("LastQuestionNumber", 0)
     }
 
 }
