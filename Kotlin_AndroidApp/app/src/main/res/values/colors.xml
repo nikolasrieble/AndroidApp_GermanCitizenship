@@ -10,6 +10,6 @@
   <color name="secondaryTextColor">#000000</color>
   <color name="colorCorrectAnswer">#004D40</color>
   <color name="colorFalseAnswer">#F51010</color>
-  <color name="backgroundColor">#e0e0e0</color>
-  <color name="surfaceColor">#FFFFFFFF</color>
+  <color name="backgroundColor">#FFFFFFFF</color>
+  <color name="surfaceColor">#F0F0F0</color>
 </resources>
