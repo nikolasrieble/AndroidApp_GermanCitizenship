@@ -34,3 +34,4 @@ captures/
 #Jupyter Notebook 
 .ipynb_checkpoints
 *.png
+.DS_Store
