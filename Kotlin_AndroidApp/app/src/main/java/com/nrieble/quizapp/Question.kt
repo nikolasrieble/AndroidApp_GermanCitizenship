@@ -17,5 +17,4 @@ class Question(
         }
         return 0.0F
     }
-
 }

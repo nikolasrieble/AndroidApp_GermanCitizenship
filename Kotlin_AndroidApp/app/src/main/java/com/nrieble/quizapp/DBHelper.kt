@@ -8,7 +8,7 @@ import android.util.Log
 import java.io.File
 import java.io.FileOutputStream
 
-//credits belong to https://stackoverflow.com/users/1749684/dardan - https://stackoverflow.com/questions/22627215/how-to-put-database-and-read-database-from-assets-folder-android-which-are-creat#22627776
+// credits belong to https://stackoverflow.com/users/1749684/dardan - https://stackoverflow.com/questions/22627215/how-to-put-database-and-read-database-from-assets-folder-android-which-are-creat#22627776
 
 class DBHelper(private val context: Context) : SQLiteOpenHelper(context, dbName, null, 1) {
 
@@ -90,7 +90,6 @@ class DBHelper(private val context: Context) : SQLiteOpenHelper(context, dbName,
         }
         c.close()
         return question_list
-
     }
 
     override fun close() {
@@ -101,5 +100,4 @@ class DBHelper(private val context: Context) : SQLiteOpenHelper(context, dbName,
     companion object {
         private const val dbName = "AllGermanCitizenship.db"
     }
-
 }

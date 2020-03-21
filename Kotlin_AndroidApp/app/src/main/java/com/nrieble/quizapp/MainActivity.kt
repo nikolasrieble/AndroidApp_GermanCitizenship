@@ -63,5 +63,4 @@ class MainActivity : AppCompatActivity() {
         val editor = getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE).edit()
         editor.putFloat(KEY_HIGHSCORE, highscore).apply()
     }
-
 }

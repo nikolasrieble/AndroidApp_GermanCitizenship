@@ -12,16 +12,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.AdView
 
 class QuizActivity : AppCompatActivity() {
     val EXTRA_SCORE = "extraScore"
 
-    //ad related
-    private lateinit var  mAdView: AdView
-
-    //layout
+    // layout
     private lateinit var textViewQuestion: TextView
     private lateinit var textViewScore: TextView
     private lateinit var textViewCount: TextView
@@ -31,26 +26,20 @@ class QuizActivity : AppCompatActivity() {
 
     private lateinit var recyclerView: RecyclerView
 
-    //database
+    // database
     private lateinit var questionList: MutableList<Question>
     private lateinit var currentQuestion: Question
 
-    //interaction
+    // interaction
     private var questionCounter: Int = 0
     private var questionCountTotal: Int = 0
     var score: Float = 0.0F
     private var answered: Boolean = false
     private var backPressedTime: Long = 0
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_quiz)
-
-        //ad related
-        mAdView = findViewById<AdView>(R.id.adView);
-        val adRequest = AdRequest.Builder().build()
-        mAdView.loadAd(adRequest);
 
         imageViewQuestion = findViewById(R.id.imageView)
         textViewQuestion = findViewById(R.id.text_view_question)
@@ -68,11 +57,10 @@ class QuizActivity : AppCompatActivity() {
 
         questionCounter = loadLastQuestion() - 1
 
-
         showNextQuestion()
 
         buttonConfirmNext.setOnClickListener {
-            //if the button has not been clicked before and at least one answer is clicked
+            // if the button has not been clicked before and at least one answer is clicked
             if (!answered) {
                 if ((currentQuestion.selection.contains(true))) {
                     checkAnswer()
@@ -86,16 +74,18 @@ class QuizActivity : AppCompatActivity() {
     }
 
     private fun showNextQuestion() {
-        //restart from 0 if all questions have been answered
-        if (questionCounter >= questionCountTotal){questionCounter = 0}
+        // restart from 0 if all questions have been answered
+        if (questionCounter >= questionCountTotal) {
+            questionCounter = 0
+        }
 
-        //get next question
+        // get next question
         this.currentQuestion = questionList[questionCounter]
-        //setup question text
+        // setup question text
         textViewQuestion.text = currentQuestion.question
-        //setup answer options
+        // setup answer options
         recyclerView.adapter = AnswerAdapter(this.currentQuestion, this)
-        //setup image
+        // setup image
 
         if (currentQuestion.image != "None") {
             val imageName = currentQuestion.image.takeLast(7).take(3)
@@ -114,7 +104,7 @@ class QuizActivity : AppCompatActivity() {
         questionCounter += 1
         textViewCount.text = "Question: $questionCounter/$questionCountTotal"
 
-        //update shared prefs
+        // update shared prefs
         updateLastQuestion(questionCounter)
 
         answered = false
@@ -123,10 +113,10 @@ class QuizActivity : AppCompatActivity() {
 
     private fun checkAnswer() {
         answered = true
-        //update view showing the correct answer
+        // update view showing the correct answer
         this.currentQuestion.disclosure = true
         recyclerView.adapter = AnswerAdapter(this.currentQuestion, this)
-        //count score if correct
+        // count score if correct
         score += this.currentQuestion.score()
         textViewScore.text = "Score: $score"
     }
@@ -143,18 +133,18 @@ class QuizActivity : AppCompatActivity() {
             finishQuiz()
         } else {
             Toast.makeText(this, "Press back again to quit", Toast.LENGTH_SHORT).show()
-
         }
         backPressedTime = System.currentTimeMillis()
     }
 
     private fun updateLastQuestion(questionNumber: Int) {
-        val editor = getApplicationContext().getSharedPreferences("sharedPrefs", Context.MODE_PRIVATE).edit()
+        val editor =
+            applicationContext.getSharedPreferences("sharedPrefs", Context.MODE_PRIVATE).edit()
         editor.putInt("LastQuestionNumber", questionNumber).apply()
     }
 
-    private fun loadLastQuestion():Int {
-        return getApplicationContext().getSharedPreferences("sharedPrefs", Context.MODE_PRIVATE).getInt("LastQuestionNumber", 0)
+    private fun loadLastQuestion(): Int {
+        return applicationContext.getSharedPreferences("sharedPrefs", Context.MODE_PRIVATE)
+            .getInt("LastQuestionNumber", 1)
     }
-
 }

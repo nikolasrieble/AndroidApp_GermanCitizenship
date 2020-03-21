@@ -9,7 +9,6 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.answer_view.view.*
 
-
 class AnswerAdapter(currentQuestion: Question, private val context: Context) :
     RecyclerView.Adapter<AnswerAdapter.MyViewHolder>() {
 
@@ -46,8 +45,7 @@ class AnswerAdapter(currentQuestion: Question, private val context: Context) :
                         R.color.primaryColor
                     )
                 )
-            }
-            else {
+            } else {
                 viewHolder.view.setBackgroundColor(
                     ContextCompat.getColor(
                         context,
@@ -55,11 +53,9 @@ class AnswerAdapter(currentQuestion: Question, private val context: Context) :
                     )
                 )
             }
-
         }
 
         return viewHolder
-
     }
 
     // Replace the contents of a view (invoked by the layout manager)
@@ -67,12 +63,12 @@ class AnswerAdapter(currentQuestion: Question, private val context: Context) :
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
 
-        //save selection
+        // save selection
         holder.view.checkbox.isChecked = currentQuestion.selection[position]
-        //show answer text
+        // show answer text
         holder.view.checkbox.text = currentQuestion.options[position]
 
-        //if DISCLOSURE, evaluate answers by color
+        // if DISCLOSURE, evaluate answers by color
         if (currentQuestion.disclosure) {
             if (currentQuestion.truth[position])
                 holder.view.checkbox.setBackgroundColor(
@@ -94,5 +90,4 @@ class AnswerAdapter(currentQuestion: Question, private val context: Context) :
 
     // Return the size of your dataset (invoked by the layout manager)
     override fun getItemCount() = currentQuestion.options.size
-
 }
