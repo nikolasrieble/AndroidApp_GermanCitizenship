@@ -12,14 +12,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.AdView
 
 class QuizActivity : AppCompatActivity() {
     val EXTRA_SCORE = "extraScore"
-
-    //ad related
-    private lateinit var  mAdView: AdView
 
     //layout
     private lateinit var textViewQuestion: TextView
@@ -46,11 +41,6 @@ class QuizActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_quiz)
-
-        //ad related
-        mAdView = findViewById<AdView>(R.id.adView);
-        val adRequest = AdRequest.Builder().build()
-        mAdView.loadAd(adRequest);
 
         imageViewQuestion = findViewById(R.id.imageView)
         textViewQuestion = findViewById(R.id.text_view_question)
@@ -87,7 +77,9 @@ class QuizActivity : AppCompatActivity() {
 
     private fun showNextQuestion() {
         //restart from 0 if all questions have been answered
-        if (questionCounter >= questionCountTotal){questionCounter = 0}
+        if (questionCounter >= questionCountTotal) {
+            questionCounter = 0
+        }
 
         //get next question
         this.currentQuestion = questionList[questionCounter]
@@ -149,12 +141,14 @@ class QuizActivity : AppCompatActivity() {
     }
 
     private fun updateLastQuestion(questionNumber: Int) {
-        val editor = getApplicationContext().getSharedPreferences("sharedPrefs", Context.MODE_PRIVATE).edit()
+        val editor =
+            applicationContext.getSharedPreferences("sharedPrefs", Context.MODE_PRIVATE).edit()
         editor.putInt("LastQuestionNumber", questionNumber).apply()
     }
 
-    private fun loadLastQuestion():Int {
-        return getApplicationContext().getSharedPreferences("sharedPrefs", Context.MODE_PRIVATE).getInt("LastQuestionNumber", 0)
+    private fun loadLastQuestion(): Int {
+        return applicationContext.getSharedPreferences("sharedPrefs", Context.MODE_PRIVATE)
+            .getInt("LastQuestionNumber", 1)
     }
 
 }
