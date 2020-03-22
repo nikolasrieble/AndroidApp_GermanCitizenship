@@ -10,6 +10,7 @@ class Question(
 ) {
     var selection = BooleanArray(options.size).toMutableList()
     var disclosure = false
+    var state: AnswerState = AnswerState.READY
 
     fun score(): Float {
         if (this.truth == this.selection) {
@@ -18,7 +19,12 @@ class Question(
         return 0.0F
     }
 
-    fun answer_selected(): Boolean {
+    fun answerSelected(): Boolean {
         return this.selection.contains(true)
+    }
+
+    enum class AnswerState {
+        READY,
+        REVIEW
     }
 }

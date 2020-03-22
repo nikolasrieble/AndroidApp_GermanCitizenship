@@ -35,7 +35,6 @@ class QuizActivity : AppCompatActivity() {
     private lateinit var quiz: Quiz
 
     // interaction
-    private var questionCounter: Int = 0
     private var questionCountTotal: Int = 0
     var score: Float = 0.0F
     private var backPressedTime: Long = 0
@@ -60,7 +59,6 @@ class QuizActivity : AppCompatActivity() {
 
         quiz = Quiz(questionList)
 
-        questionCounter = loadLastQuestion() - 1
 
         showNextQuestion()
 
@@ -70,17 +68,22 @@ class QuizActivity : AppCompatActivity() {
     }
 
     private fun proceed() {
-        when (this.quiz.state) {
-            Quiz.QuizState.READY ->
-                if (this.currentQuestion.answer_selected()) {
+        when (this.currentQuestion.state) {
+            Question.AnswerState.READY ->
+                if (this.currentQuestion.answerSelected()) {
                     this.quiz.answer(this.currentQuestion)
                     checkAnswer()
                 } else {
                     Toast.makeText(this, "Please select an answer", Toast.LENGTH_SHORT).show()
                 }
 
-            Quiz.QuizState.REVIEW -> showNextQuestion()
+            Question.AnswerState.REVIEW -> showNextQuestion()
         }
+    }
+
+    private fun showPreviousQuestion() {
+        // get next question
+        this.currentQuestion = this.quiz.getPreviousQuestion()
     }
 
     private fun showNextQuestion() {
@@ -90,7 +93,7 @@ class QuizActivity : AppCompatActivity() {
         updateQuestionActivityView(this.currentQuestion)
 
         // update shared prefs
-        updateLastQuestion(questionCounter)
+        updateLastQuestion(quiz.progress.questionIndex)
 
         buttonConfirmNext.text = "Next Question"
     }
@@ -116,8 +119,7 @@ class QuizActivity : AppCompatActivity() {
         } else imageViewQuestion.setImageDrawable(null)
 
         // update counter
-        questionCounter += 1
-        textViewCount.text = "Question: $questionCounter/$questionCountTotal"
+        textViewCount.text = "Question: ${quiz.progress.questionIndex + 1}/$questionCountTotal"
     }
 
     private fun checkAnswer() {
@@ -126,7 +128,7 @@ class QuizActivity : AppCompatActivity() {
 
         recyclerView.adapter = AnswerAdapter(this.currentQuestion, this)
 
-        textViewScore.text = "Score: ${quiz.score}"
+        textViewScore.text = "Score: ${quiz.progress.score}"
     }
 
     private fun finishQuiz() {
