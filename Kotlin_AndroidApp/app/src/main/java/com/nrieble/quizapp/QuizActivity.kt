@@ -65,16 +65,21 @@ class QuizActivity : AppCompatActivity() {
         showNextQuestion()
 
         buttonConfirmNext.setOnClickListener {
-            // if the button has not been clicked before and at least one answer is clicked
-            if (!currentQuestion.answered) {
-                if ((currentQuestion.selection.contains(true))) {
+            proceed()
+        }
+    }
+
+    private fun proceed() {
+        when (this.quiz.state) {
+            Quiz.QuizState.READY ->
+                if (this.currentQuestion.answer_selected()) {
+                    this.quiz.answer(this.currentQuestion)
                     checkAnswer()
                 } else {
                     Toast.makeText(this, "Please select an answer", Toast.LENGTH_SHORT).show()
                 }
-            } else {
-                showNextQuestion()
-            }
+
+            Quiz.QuizState.REVIEW -> showNextQuestion()
         }
     }
 
@@ -116,14 +121,12 @@ class QuizActivity : AppCompatActivity() {
     }
 
     private fun checkAnswer() {
-        currentQuestion.answered = true
         // update view showing the correct answer
         this.currentQuestion.disclosure = true
 
         recyclerView.adapter = AnswerAdapter(this.currentQuestion, this)
-        // count score if correct
-        score += this.currentQuestion.score()
-        textViewScore.text = "Score: $score"
+
+        textViewScore.text = "Score: ${quiz.score}"
     }
 
     private fun finishQuiz() {
