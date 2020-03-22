@@ -1,4 +1,4 @@
-package com.nrieble.quizapp
+package com.nrieble.quizapp.domain
 
 class Question(
     val question: String,

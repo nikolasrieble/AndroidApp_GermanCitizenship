@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.nrieble.quizapp.domain.Question
 import kotlinx.android.synthetic.main.answer_view.view.*
 
 class AnswerAdapter(currentQuestion: Question, private val context: Context) :

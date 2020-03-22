@@ -12,6 +12,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.nrieble.quizapp.domain.Question
+import com.nrieble.quizapp.domain.Quiz
 
 class QuizActivity : AppCompatActivity() {
     val EXTRA_SCORE = "extraScore"
@@ -29,6 +31,8 @@ class QuizActivity : AppCompatActivity() {
     // database
     private lateinit var questionList: MutableList<Question>
     private lateinit var currentQuestion: Question
+
+    private lateinit var quiz: Quiz
 
     // interaction
     private var questionCounter: Int = 0
@@ -54,6 +58,8 @@ class QuizActivity : AppCompatActivity() {
         questionList = dbhelper.getAllQuestions()
         questionCountTotal = questionList.size
 
+        quiz = Quiz(questionList)
+
         questionCounter = loadLastQuestion() - 1
 
         showNextQuestion()
@@ -73,21 +79,26 @@ class QuizActivity : AppCompatActivity() {
     }
 
     private fun showNextQuestion() {
-        // restart from 0 if all questions have been answered
-        if (questionCounter >= questionCountTotal) {
-            questionCounter = 0
-        }
-
         // get next question
-        this.currentQuestion = questionList[questionCounter]
+        this.currentQuestion = this.quiz.getNextQuestion()
+
+        updateQuestionActivityView(this.currentQuestion)
+
+        // update shared prefs
+        updateLastQuestion(questionCounter)
+
+        buttonConfirmNext.text = "Next Question"
+    }
+
+    private fun updateQuestionActivityView(question: Question) {
         // setup question text
-        textViewQuestion.text = currentQuestion.question
+        textViewQuestion.text = question.question
         // setup answer options
-        recyclerView.adapter = AnswerAdapter(this.currentQuestion, this)
+        recyclerView.adapter = AnswerAdapter(question, this)
         // setup image
 
-        if (currentQuestion.image != "None") {
-            val imageName = currentQuestion.image.takeLast(7).take(3)
+        if (question.image != "None") {
+            val imageName = question.image.takeLast(7).take(3)
             val image = ContextCompat.getDrawable(
                 this,
                 this.resources.getIdentifier(
@@ -102,11 +113,6 @@ class QuizActivity : AppCompatActivity() {
         // update counter
         questionCounter += 1
         textViewCount.text = "Question: $questionCounter/$questionCountTotal"
-
-        // update shared prefs
-        updateLastQuestion(questionCounter)
-
-        buttonConfirmNext.text = "Next Question"
     }
 
     private fun checkAnswer() {
