@@ -34,7 +34,6 @@ class QuizActivity : AppCompatActivity() {
     private var questionCounter: Int = 0
     private var questionCountTotal: Int = 0
     var score: Float = 0.0F
-    private var answered: Boolean = false
     private var backPressedTime: Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,7 +60,7 @@ class QuizActivity : AppCompatActivity() {
 
         buttonConfirmNext.setOnClickListener {
             // if the button has not been clicked before and at least one answer is clicked
-            if (!answered) {
+            if (!currentQuestion.answered) {
                 if ((currentQuestion.selection.contains(true))) {
                     checkAnswer()
                 } else {
@@ -107,14 +106,14 @@ class QuizActivity : AppCompatActivity() {
         // update shared prefs
         updateLastQuestion(questionCounter)
 
-        answered = false
         buttonConfirmNext.text = "Next Question"
     }
 
     private fun checkAnswer() {
-        answered = true
+        currentQuestion.answered = true
         // update view showing the correct answer
         this.currentQuestion.disclosure = true
+
         recyclerView.adapter = AnswerAdapter(this.currentQuestion, this)
         // count score if correct
         score += this.currentQuestion.score()
