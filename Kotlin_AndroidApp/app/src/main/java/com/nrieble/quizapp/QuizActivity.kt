@@ -20,19 +20,18 @@ class QuizActivity : AppCompatActivity() {
     private lateinit var quiz: Quiz
 
     // interaction
-    var score: Float = 0.0F
+    private var score: Float = 0.0F
     private var backPressedTime: Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // setup layout
         setContentView(R.layout.activity_quiz)
-
         AnswerRecyclerView.layoutManager = LinearLayoutManager(this)
-        quiz = loadQuiz()
-
-        showNextQuestion()
-
         confirm_answer.setOnClickListener { proceed() }
+        // get content
+        quiz = loadQuiz()
+        showNextQuestion()
     }
 
     private fun loadQuiz(): Quiz {
@@ -66,7 +65,7 @@ class QuizActivity : AppCompatActivity() {
         updateQuestionActivityView(this.currentQuestion)
 
         // update shared prefs
-        updateLastQuestion(quiz.progress.questionIndex)
+        updateLastQuestion(quiz.state.questionIndex)
 
         confirm_answer.text = "Next Question"
     }
@@ -92,7 +91,7 @@ class QuizActivity : AppCompatActivity() {
         } else imageView.setImageDrawable(null)
 
         // update counter
-        text_view_count.text = "Question: ${quiz.progress.questionIndex + 1}/$quiz.size"
+        text_view_count.text = "Question: ${quiz.state.questionIndex + 1}/${quiz.size}"
     }
 
     private fun checkAnswer() {
@@ -101,7 +100,7 @@ class QuizActivity : AppCompatActivity() {
 
         AnswerRecyclerView.adapter = AnswerAdapter(this.currentQuestion, this)
 
-        text_view_score.text = "Score: ${quiz.progress.score}"
+        text_view_score.text = "Score: ${quiz.state.score}"
     }
 
     private fun finishQuiz() {

@@ -4,21 +4,21 @@ class Quiz(
     private val questions: List<Question>
 ) {
     val size = questions.size
-    var progress = QuizProgress()
+    var state = QuizState()
 
     fun getNextQuestion(): Question {
         updateQuestionIndex(1)
-        return questions[this.progress.questionIndex]
+        return questions[this.state.questionIndex]
     }
 
     fun getPreviousQuestion(): Question {
         updateQuestionIndex(-1)
-        return questions[this.progress.questionIndex]
+        return questions[this.state.questionIndex]
     }
 
     private fun updateQuestionIndex(delta: Int) {
-        val nextIndexCandidate: Int = this.progress.questionIndex + delta
-        this.progress.questionIndex = when {
+        val nextIndexCandidate: Int = this.state.questionIndex + delta
+        this.state.questionIndex = when {
             nextIndexCandidate < 0 -> questions.lastIndex
             nextIndexCandidate > questions.lastIndex -> 0
             else -> nextIndexCandidate
@@ -26,11 +26,11 @@ class Quiz(
     }
 
     fun answer(question: Question) {
-        this.progress.score += question.score()
+        this.state.score += question.score()
         question.state = Question.AnswerState.REVIEW
     }
 
-    class QuizProgress {
+    class QuizState {
         var questionIndex: Int = 0
         var score: Float = 0.0F
     }

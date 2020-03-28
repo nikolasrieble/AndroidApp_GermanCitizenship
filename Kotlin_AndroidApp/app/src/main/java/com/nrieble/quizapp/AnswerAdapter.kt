@@ -13,7 +13,7 @@ import kotlinx.android.synthetic.main.answer_view.view.*
 class AnswerAdapter(currentQuestion: Question, private val context: Context) :
     RecyclerView.Adapter<AnswerAdapter.MyViewHolder>() {
 
-    var currentQuestion = currentQuestion
+    private var currentQuestion = currentQuestion
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and

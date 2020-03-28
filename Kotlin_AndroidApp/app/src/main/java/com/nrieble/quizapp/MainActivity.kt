@@ -12,8 +12,8 @@ import kotlinx.android.synthetic.main.starting_screen.*
 class MainActivity : AppCompatActivity() {
     private val REQUEST_CODE_QUIZ = 1
 
-    val SHARED_PREFS = "sharedPrefs"
-    val KEY_HIGHSCORE = "keyHighscore"
+    private val SHARED_PREFS = "sharedPrefs"
+    private val KEY_HIGHSCORE = "keyHighscore"
 
     private var highscore: Float = 0.0F
 
@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
         buttonStartQuiz.setOnClickListener { startQuiz() }
     }
 
-    fun startQuiz() {
+    private fun startQuiz() {
         val intent = Intent(this, QuizActivity::class.java)
         startActivityForResult(intent, REQUEST_CODE_QUIZ)
     }

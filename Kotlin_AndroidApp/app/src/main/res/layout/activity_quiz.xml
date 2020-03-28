@@ -5,7 +5,6 @@
     android:id="@+id/coordinatorLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/backgroundColor"
     android:orientation="vertical"
     android:padding="16dp"
     tools:context=".MainActivity">
@@ -79,6 +78,7 @@
         ads:layout_constraintBottom_toBottomOf="@+id/text_view_question"
         ads:layout_constraintStart_toStartOf="parent"
         ads:layout_constraintTop_toTopOf="@+id/text_view_question"
+        android:contentDescription="Optional image to the question"
         tools:srcCompat="@tools:sample/avatars" />
 
     <androidx.recyclerview.widget.RecyclerView

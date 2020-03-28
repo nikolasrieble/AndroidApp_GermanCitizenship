@@ -10,7 +10,7 @@ class Question(
 ) {
     var selection = BooleanArray(options.size).toMutableList()
     var disclosure = false
-    var state: AnswerState = AnswerState.READY
+    var state = AnswerState.READY
 
     fun score(): Float {
         if (this.truth == this.selection) {
