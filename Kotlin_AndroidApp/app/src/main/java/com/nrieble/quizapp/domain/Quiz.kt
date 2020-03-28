@@ -3,6 +3,7 @@ package com.nrieble.quizapp.domain
 class Quiz(
     private val questions: List<Question>
 ) {
+    val size = questions.size
     var progress = QuizProgress()
 
     fun getNextQuestion(): Question {

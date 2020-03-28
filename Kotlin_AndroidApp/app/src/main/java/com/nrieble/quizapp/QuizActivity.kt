@@ -16,13 +16,10 @@ class QuizActivity : AppCompatActivity() {
     val EXTRA_SCORE = "extraScore"
 
     // database
-    private lateinit var questionList: MutableList<Question>
     private lateinit var currentQuestion: Question
-
     private lateinit var quiz: Quiz
 
     // interaction
-    private var questionCountTotal: Int = 0
     var score: Float = 0.0F
     private var backPressedTime: Long = 0
 
@@ -31,18 +28,16 @@ class QuizActivity : AppCompatActivity() {
         setContentView(R.layout.activity_quiz)
 
         AnswerRecyclerView.layoutManager = LinearLayoutManager(this)
-
-        val dbhelper = DBHelper(context = this)
-        questionList = dbhelper.getAllQuestions()
-        questionCountTotal = questionList.size
-
-        quiz = Quiz(questionList)
+        quiz = loadQuiz()
 
         showNextQuestion()
 
-        confirm_answer.setOnClickListener {
-            proceed()
-        }
+        confirm_answer.setOnClickListener { proceed() }
+    }
+
+    private fun loadQuiz(): Quiz {
+        val dbhelper = DBHelper(context = this)
+        return Quiz(dbhelper.getAllQuestions())
     }
 
     private fun proceed() {
@@ -97,7 +92,7 @@ class QuizActivity : AppCompatActivity() {
         } else imageView.setImageDrawable(null)
 
         // update counter
-        text_view_count.text = "Question: ${quiz.progress.questionIndex + 1}/$questionCountTotal"
+        text_view_count.text = "Question: ${quiz.progress.questionIndex + 1}/$quiz.size"
     }
 
     private fun checkAnswer() {
