@@ -5,9 +5,9 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.ads.MobileAds
+import kotlinx.android.synthetic.main.starting_screen.*
 
 class MainActivity : AppCompatActivity() {
     private val REQUEST_CODE_QUIZ = 1
@@ -15,7 +15,6 @@ class MainActivity : AppCompatActivity() {
     val SHARED_PREFS = "sharedPrefs"
     val KEY_HIGHSCORE = "keyHighscore"
 
-    private lateinit var textViewHighscore: TextView
     private var highscore: Float = 0.0F
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,7 +24,6 @@ class MainActivity : AppCompatActivity() {
 
         MobileAds.initialize(this)
 
-        textViewHighscore = findViewById(R.id.text_view_highscore)
         loadHighscore()
 
         val buttonStartQuiz = findViewById<Button>(R.id.button_start_quiz)
@@ -53,12 +51,12 @@ class MainActivity : AppCompatActivity() {
     private fun loadHighscore() {
         highscore =
             getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE).getFloat(KEY_HIGHSCORE, 0.0F)
-        textViewHighscore.text = "Highscore: $highscore"
+        text_view_highscore.text = "Highscore: $highscore"
     }
 
     private fun updateHighscore(score: Float) {
         this.highscore = score
-        textViewHighscore.text = "Highscore: $highscore"
+        text_view_highscore.text = "Highscore: $highscore"
 
         val editor = getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE).edit()
         editor.putFloat(KEY_HIGHSCORE, highscore).apply()

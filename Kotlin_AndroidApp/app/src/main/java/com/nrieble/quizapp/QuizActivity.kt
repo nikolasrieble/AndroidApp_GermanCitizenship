@@ -38,7 +38,6 @@ class QuizActivity : AppCompatActivity() {
 
         quiz = Quiz(questionList)
 
-
         showNextQuestion()
 
         confirm_answer.setOnClickListener {
