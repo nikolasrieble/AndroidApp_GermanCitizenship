@@ -105,12 +105,12 @@
         android:text=' + '
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        ads:layout_constraintBottom_toBottomOf="@+id/ConfirmAnswer"
+        ads:layout_constraintBottom_toBottomOf="@+id/confirm_answer"
         ads:layout_constraintEnd_toEndOf="parent"
-        ads:layout_constraintTop_toTopOf="@+id/ConfirmAnswer" />
+        ads:layout_constraintTop_toTopOf="@+id/confirm_answer" />
 
     <Button
-        android:id="@+id/ConfirmAnswer"
+        android:id="@+id/confirm_answer"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@color/secondaryColor"
@@ -126,9 +126,9 @@
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:text=' - '
-        ads:layout_constraintBottom_toBottomOf="@+id/ConfirmAnswer"
+        ads:layout_constraintBottom_toBottomOf="@+id/confirm_answer"
         ads:layout_constraintStart_toStartOf="parent"
-        ads:layout_constraintTop_toTopOf="@+id/ConfirmAnswer" />
+        ads:layout_constraintTop_toTopOf="@+id/confirm_answer" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
