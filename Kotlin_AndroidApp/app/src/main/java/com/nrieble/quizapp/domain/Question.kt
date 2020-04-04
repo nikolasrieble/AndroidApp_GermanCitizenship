@@ -1,4 +1,4 @@
-package com.nrieble.quizapp
+package com.nrieble.quizapp.domain
 
 class Question(
     val question: String,
@@ -10,11 +10,21 @@ class Question(
 ) {
     var selection = BooleanArray(options.size).toMutableList()
     var disclosure = false
+    var state = AnswerState.READY
 
     fun score(): Float {
         if (this.truth == this.selection) {
             return 1.0F
         }
         return 0.0F
+    }
+
+    fun answerSelected(): Boolean {
+        return this.selection.contains(true)
+    }
+
+    enum class AnswerState {
+        READY,
+        REVIEW
     }
 }

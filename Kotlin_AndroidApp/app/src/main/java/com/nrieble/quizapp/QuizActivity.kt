@@ -4,91 +4,81 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import com.nrieble.quizapp.domain.Question
+import com.nrieble.quizapp.domain.Quiz
+import kotlinx.android.synthetic.main.activity_quiz.*
 
 class QuizActivity : AppCompatActivity() {
     val EXTRA_SCORE = "extraScore"
 
-    // layout
-    private lateinit var textViewQuestion: TextView
-    private lateinit var textViewScore: TextView
-    private lateinit var textViewCount: TextView
-    private lateinit var textViewCountdown: TextView
-    private lateinit var buttonConfirmNext: Button
-    private lateinit var imageViewQuestion: ImageView
-
-    private lateinit var recyclerView: RecyclerView
-
     // database
-    private lateinit var questionList: MutableList<Question>
     private lateinit var currentQuestion: Question
+    private lateinit var quiz: Quiz
 
     // interaction
-    private var questionCounter: Int = 0
-    private var questionCountTotal: Int = 0
-    var score: Float = 0.0F
-    private var answered: Boolean = false
+    private var score: Float = 0.0F
     private var backPressedTime: Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // setup layout
         setContentView(R.layout.activity_quiz)
-
-        imageViewQuestion = findViewById(R.id.imageView)
-        textViewQuestion = findViewById(R.id.text_view_question)
-        textViewScore = findViewById(R.id.text_view_score)
-
-        textViewCount = findViewById(R.id.text_view_count)
-        textViewCountdown = findViewById(R.id.text_view_countdown)
-        buttonConfirmNext = findViewById(R.id.ConfirmAnswer)
-        recyclerView = findViewById(R.id.AnswerRecyclerView)
-        recyclerView.layoutManager = LinearLayoutManager(this)
-
-        val dbhelper = DBHelper(context = this)
-        questionList = dbhelper.getAllQuestions()
-        questionCountTotal = questionList.size
-
-        questionCounter = loadLastQuestion() - 1
-
+        AnswerRecyclerView.layoutManager = LinearLayoutManager(this)
+        confirm_answer.setOnClickListener { proceed() }
+        // get content
+        quiz = loadQuiz()
         showNextQuestion()
+    }
 
-        buttonConfirmNext.setOnClickListener {
-            // if the button has not been clicked before and at least one answer is clicked
-            if (!answered) {
-                if ((currentQuestion.selection.contains(true))) {
+    private fun loadQuiz(): Quiz {
+        val dbhelper = DBHelper(context = this)
+        return Quiz(dbhelper.getAllQuestions())
+    }
+
+    private fun proceed() {
+        when (this.currentQuestion.state) {
+            Question.AnswerState.READY ->
+                if (this.currentQuestion.answerSelected()) {
+                    this.quiz.answer(this.currentQuestion)
                     checkAnswer()
                 } else {
                     Toast.makeText(this, "Please select an answer", Toast.LENGTH_SHORT).show()
                 }
-            } else {
-                showNextQuestion()
-            }
+
+            Question.AnswerState.REVIEW -> showNextQuestion()
         }
     }
 
-    private fun showNextQuestion() {
-        // restart from 0 if all questions have been answered
-        if (questionCounter >= questionCountTotal) {
-            questionCounter = 0
-        }
-
+    private fun showPreviousQuestion() {
         // get next question
-        this.currentQuestion = questionList[questionCounter]
+        this.currentQuestion = this.quiz.getPreviousQuestion()
+    }
+
+    private fun showNextQuestion() {
+        // get next question
+        this.currentQuestion = this.quiz.getNextQuestion()
+
+        updateQuestionActivityView(this.currentQuestion)
+
+        // update shared prefs
+        updateLastQuestion(quiz.state.questionIndex)
+
+        confirm_answer.text = "Next Question"
+    }
+
+    private fun updateQuestionActivityView(question: Question) {
         // setup question text
-        textViewQuestion.text = currentQuestion.question
+        text_view_question.text = question.question
         // setup answer options
-        recyclerView.adapter = AnswerAdapter(this.currentQuestion, this)
+        AnswerRecyclerView.adapter = AnswerAdapter(question, this)
         // setup image
 
-        if (currentQuestion.image != "None") {
-            val imageName = currentQuestion.image.takeLast(7).take(3)
+        if (question.image != "None") {
+            val imageName = question.image.takeLast(7).take(3)
             val image = ContextCompat.getDrawable(
                 this,
                 this.resources.getIdentifier(
@@ -97,28 +87,20 @@ class QuizActivity : AppCompatActivity() {
                     this.packageName
                 )
             )
-            imageViewQuestion.setImageDrawable(image)
-        } else imageViewQuestion.setImageDrawable(null)
+            imageView.setImageDrawable(image)
+        } else imageView.setImageDrawable(null)
 
         // update counter
-        questionCounter += 1
-        textViewCount.text = "Question: $questionCounter/$questionCountTotal"
-
-        // update shared prefs
-        updateLastQuestion(questionCounter)
-
-        answered = false
-        buttonConfirmNext.text = "Next Question"
+        text_view_count.text = "Question: ${quiz.state.questionIndex + 1}/${quiz.size}"
     }
 
     private fun checkAnswer() {
-        answered = true
         // update view showing the correct answer
         this.currentQuestion.disclosure = true
-        recyclerView.adapter = AnswerAdapter(this.currentQuestion, this)
-        // count score if correct
-        score += this.currentQuestion.score()
-        textViewScore.text = "Score: $score"
+
+        AnswerRecyclerView.adapter = AnswerAdapter(this.currentQuestion, this)
+
+        text_view_score.text = "Score: ${quiz.state.score}"
     }
 
     private fun finishQuiz() {
