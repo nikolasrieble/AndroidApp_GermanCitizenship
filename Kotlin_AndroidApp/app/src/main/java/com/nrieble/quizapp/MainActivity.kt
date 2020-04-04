@@ -4,9 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.gms.ads.MobileAds
 import kotlinx.android.synthetic.main.starting_screen.*
 
 class MainActivity : AppCompatActivity() {
@@ -19,15 +17,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContentView(R.layout.starting_screen)
-
-        MobileAds.initialize(this)
-
         loadHighscore()
-
-        val buttonStartQuiz = findViewById<Button>(R.id.button_start_quiz)
-        buttonStartQuiz.setOnClickListener { startQuiz() }
+        button_start_quiz.setOnClickListener { startQuiz() }
     }
 
     private fun startQuiz() {
@@ -38,12 +30,10 @@ class MainActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (requestCode == REQUEST_CODE_QUIZ) {
-            if (resultCode == Activity.RESULT_OK) {
-                val score = data?.getFloatExtra(QuizActivity().EXTRA_SCORE, 0.0F)
-                if (score!! >= highscore) {
-                    updateHighscore(score)
-                }
+        if (requestCode == REQUEST_CODE_QUIZ && resultCode == Activity.RESULT_OK) {
+            val score = data?.getFloatExtra(QuizActivity().EXTRA_SCORE, 0.0F)
+            if (score!! >= highscore) {
+                updateHighscore(score)
             }
         }
     }

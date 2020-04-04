@@ -55,7 +55,7 @@ class DBHelper(private val context: Context) : SQLiteOpenHelper(context, dbName,
 
     fun getAllQuestions(): MutableList<Question> {
 
-        val question_list = mutableListOf<Question>()
+        val questionList = mutableListOf<Question>()
         val database = this.readableDatabase
 
         val SELECT_ALL_QUESTIONS = "select " +
@@ -86,11 +86,11 @@ class DBHelper(private val context: Context) : SQLiteOpenHelper(context, dbName,
                     image,
                     category
                 )
-                question_list.add(q)
+                questionList.add(q)
             } while (c.moveToNext())
         }
         c.close()
-        return question_list
+        return questionList
     }
 
     override fun close() {
