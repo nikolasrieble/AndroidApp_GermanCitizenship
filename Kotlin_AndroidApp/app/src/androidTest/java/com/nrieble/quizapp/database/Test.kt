@@ -15,15 +15,18 @@ import java.io.IOException
 open class QuizDatabaseTest {
 
     private lateinit var questionDao: QuestionDAO
+    private lateinit var answerDao: AnswerDAO
     private lateinit var quizDatabase: QuizDatabase
+
 
     @Before
     fun initDb() {
         val context = ApplicationProvider.getApplicationContext<Context>()
         quizDatabase = Room.databaseBuilder(context, QuizDatabase::class.java, "test.db")
-            .createFromAsset("AllGermanCitizenship.db")
+            .createFromAsset("AllGermanCitizenshipV2.db")
             .build()
         questionDao = quizDatabase.questionDao()
+        answerDao = quizDatabase.answerDao()
     }
 
     @After
@@ -33,7 +36,13 @@ open class QuizDatabaseTest {
     }
 
     @Test
-    fun prePopulationWorks() {
+    fun prePopulationWorksAndAQuestionsExist() {
+        val questions = questionDao.getAll()
+        assert(questions.isNotEmpty())
+    }
+
+    @Test
+    fun prePopulationWorksAndAnswerExist() {
         val questions = questionDao.getAll()
         assert(questions.isNotEmpty())
     }
