@@ -7,13 +7,13 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.nrieble.quizapp.domain.Question
+import com.nrieble.quizapp.domain.QuizItem
 import kotlinx.android.synthetic.main.answer_view.view.*
 
-class AnswerAdapter(currentQuestion: Question, private val context: Context) :
+class AnswerAdapter(currentQuizItem: QuizItem, private val context: Context) :
     RecyclerView.Adapter<AnswerAdapter.MyViewHolder>() {
 
-    private var currentQuestion = currentQuestion
+    private var currentQuestion = currentQuizItem
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and

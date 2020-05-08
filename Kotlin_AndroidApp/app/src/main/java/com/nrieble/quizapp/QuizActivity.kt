@@ -8,15 +8,16 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.nrieble.quizapp.domain.Question
+import com.nrieble.quizapp.domain.QuizItem
 import com.nrieble.quizapp.domain.Quiz
+import com.nrieble.quizapp.domain.QuizItemRepository
 import kotlinx.android.synthetic.main.activity_quiz.*
 
 class QuizActivity : AppCompatActivity() {
     val EXTRA_SCORE = "extraScore"
 
     // database
-    private lateinit var currentQuestion: Question
+    private lateinit var currentQuizItem: QuizItem
     private lateinit var quiz: Quiz
 
     // interaction
@@ -35,34 +36,34 @@ class QuizActivity : AppCompatActivity() {
     }
 
     private fun loadQuiz(): Quiz {
-        val dbhelper = DBHelper(context = this)
-        return Quiz(dbhelper.getAllQuestions())
+        val repository = QuizItemRepository(context = this)
+        return Quiz(repository.getQuizItems())
     }
 
     private fun proceed() {
-        when (this.currentQuestion.state) {
-            Question.AnswerState.READY ->
-                if (this.currentQuestion.answerSelected()) {
-                    this.quiz.answer(this.currentQuestion)
+        when (this.currentQuizItem.state) {
+            QuizItem.AnswerState.READY ->
+                if (this.currentQuizItem.answerSelected()) {
+                    this.quiz.answer(this.currentQuizItem)
                     checkAnswer()
                 } else {
                     Toast.makeText(this, "Please select an answer", Toast.LENGTH_SHORT).show()
                 }
 
-            Question.AnswerState.REVIEW -> showNextQuestion()
+            QuizItem.AnswerState.REVIEW -> showNextQuestion()
         }
     }
 
     private fun showPreviousQuestion() {
         // get next question
-        this.currentQuestion = this.quiz.getPreviousQuestion()
+        this.currentQuizItem = this.quiz.getPreviousQuestion()
     }
 
     private fun showNextQuestion() {
         // get next question
-        this.currentQuestion = this.quiz.getNextQuestion()
+        this.currentQuizItem = this.quiz.getNextQuestion()
 
-        updateQuestionActivityView(this.currentQuestion)
+        updateQuestionActivityView(this.currentQuizItem)
 
         // update shared prefs
         updateLastQuestion(quiz.state.questionIndex)
@@ -70,15 +71,15 @@ class QuizActivity : AppCompatActivity() {
         confirm_answer.text = "Next Question"
     }
 
-    private fun updateQuestionActivityView(question: Question) {
+    private fun updateQuestionActivityView(quizItem: QuizItem) {
         // setup question text
-        text_view_question.text = question.question
+        text_view_question.text = quizItem.question.text.toString()
         // setup answer options
-        AnswerRecyclerView.adapter = AnswerAdapter(question, this)
+        AnswerRecyclerView.adapter = AnswerAdapter(quizItem, this)
         // setup image
 
-        if (question.image != "None") {
-            val imageName = question.image.takeLast(7).take(3)
+        if (quizItem.question.image != "None") {
+            val imageName = quizItem.question.image?.takeLast(7)?.take(3)
             val image = ContextCompat.getDrawable(
                 this,
                 this.resources.getIdentifier(
@@ -96,9 +97,9 @@ class QuizActivity : AppCompatActivity() {
 
     private fun checkAnswer() {
         // update view showing the correct answer
-        this.currentQuestion.disclosure = true
+        this.currentQuizItem.disclosure = true
 
-        AnswerRecyclerView.adapter = AnswerAdapter(this.currentQuestion, this)
+        AnswerRecyclerView.adapter = AnswerAdapter(this.currentQuizItem, this)
 
         text_view_score.text = "Score: ${quiz.state.score}"
     }

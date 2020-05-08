@@ -20,4 +20,10 @@ data class Question(
     @ColumnInfo(name = "Image")
     val image: String?
 
-)
+) {
+    fun isValid(): Boolean {
+        return id != null &&
+                category != null &&
+                text != null
+    }
+}

@@ -12,7 +12,7 @@ import java.io.IOException
 
 
 @RunWith(AndroidJUnit4::class)
-open class QuizDatabaseTest {
+open class PrePopulationTest {
 
     private lateinit var questionDao: QuestionDAO
     private lateinit var answerDao: AnswerDAO

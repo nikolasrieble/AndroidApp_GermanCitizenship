@@ -22,4 +22,11 @@ data class Answer(
     @ColumnInfo(name = "QuestionID")
     val questionId: Int?
 
-)
+) {
+    fun isValid(): Boolean {
+        return id != null &&
+                truth != null &&
+                text != null &&
+                questionId != null
+    }
+}

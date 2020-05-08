@@ -1,33 +1,33 @@
 package com.nrieble.quizapp.domain
 
 class Quiz(
-    private val questions: List<Question>
+    private val quizItems: List<QuizItem>
 ) {
-    val size = questions.size
+    val size = quizItems.size
     var state = QuizState()
 
-    fun getNextQuestion(): Question {
+    fun getNextQuestion(): QuizItem {
         updateQuestionIndex(1)
-        return questions[this.state.questionIndex]
+        return quizItems[this.state.questionIndex]
     }
 
-    fun getPreviousQuestion(): Question {
+    fun getPreviousQuestion(): QuizItem {
         updateQuestionIndex(-1)
-        return questions[this.state.questionIndex]
+        return quizItems[this.state.questionIndex]
     }
 
     private fun updateQuestionIndex(delta: Int) {
         val nextIndexCandidate: Int = this.state.questionIndex + delta
         this.state.questionIndex = when {
-            nextIndexCandidate < 0 -> questions.lastIndex
-            nextIndexCandidate > questions.lastIndex -> 0
+            nextIndexCandidate < 0 -> quizItems.lastIndex
+            nextIndexCandidate > quizItems.lastIndex -> 0
             else -> nextIndexCandidate
         }
     }
 
-    fun answer(question: Question) {
-        this.state.score += question.score()
-        question.state = Question.AnswerState.REVIEW
+    fun answer(quizItem: QuizItem) {
+        this.state.score += quizItem.score()
+        quizItem.state = QuizItem.AnswerState.REVIEW
     }
 
     class QuizState {

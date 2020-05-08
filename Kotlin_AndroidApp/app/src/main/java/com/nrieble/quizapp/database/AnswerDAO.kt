@@ -6,8 +6,8 @@ import androidx.room.Query
 @Dao
 interface AnswerDAO {
     @Query("SELECT * FROM Answer")
-    fun getAll(): List<Question>
+    fun getAll(): List<Answer>
 
     @Query("SELECT * FROM Answer where QuestionID = (:questionId)")
-    fun getAllForQuestion(questionId: String): List<Question>
+    fun getAllForQuestion(questionId: String): List<Answer>
 }
