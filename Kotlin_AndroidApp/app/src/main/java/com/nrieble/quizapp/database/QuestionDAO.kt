@@ -6,8 +6,8 @@ import androidx.room.Query
 @Dao
 interface QuestionDAO {
     @Query("SELECT * FROM Question")
-    fun getAll(): List<Question>
+    suspend fun getAll(): List<Question>
 
     @Query("SELECT * FROM Question where Category = (:category)")
-    fun getAllByCategory(category: String): List<Question>
+    suspend fun getAllByCategory(category: String): List<Question>
 }

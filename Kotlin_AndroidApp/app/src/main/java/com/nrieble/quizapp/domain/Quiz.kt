@@ -1,8 +1,10 @@
 package com.nrieble.quizapp.domain
 
+import androidx.lifecycle.LiveData
+
 class Quiz(
     private val quizItems: List<QuizItem>
-) {
+) : LiveData<QuizItem>() {
     val size = quizItems.size
     var state = QuizState()
 

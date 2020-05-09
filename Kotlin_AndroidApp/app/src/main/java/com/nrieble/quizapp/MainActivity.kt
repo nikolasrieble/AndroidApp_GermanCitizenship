@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.nrieble.quizapp.database.QuizDatabase
 import kotlinx.android.synthetic.main.starting_screen.*
 
 class MainActivity : AppCompatActivity() {
@@ -23,6 +24,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun startQuiz() {
+        // database
+        val quizDatabase = QuizDatabase.getInstance(this)
         val intent = Intent(this, QuizActivity::class.java)
         startActivityForResult(intent, REQUEST_CODE_QUIZ)
     }

@@ -4,6 +4,10 @@ import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.runner.AndroidJUnit4
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -22,9 +26,7 @@ open class PrePopulationTest {
     @Before
     fun initDb() {
         val context = ApplicationProvider.getApplicationContext<Context>()
-        quizDatabase = Room.databaseBuilder(context, QuizDatabase::class.java, "test.db")
-            .createFromAsset("AllGermanCitizenshipV2.db")
-            .build()
+        quizDatabase = QuizDatabase.getInstance(context)
         questionDao = quizDatabase.questionDao()
         answerDao = quizDatabase.answerDao()
     }
@@ -37,13 +39,22 @@ open class PrePopulationTest {
 
     @Test
     fun prePopulationWorksAndAQuestionsExist() {
-        val questions = questionDao.getAll()
-        assert(questions.isNotEmpty())
+        CoroutineScope(Dispatchers.Main).launch {
+            withContext(Dispatchers.IO) {
+                val questions = questionDao.getAll()
+                assert(questions.isNotEmpty())
+            }
+        }
+
     }
 
     @Test
     fun prePopulationWorksAndAnswerExist() {
-        val questions = questionDao.getAll()
-        assert(questions.isNotEmpty())
+        CoroutineScope(Dispatchers.Main).launch {
+            withContext(Dispatchers.IO) {
+                val questions = questionDao.getAll()
+                assert(questions.isNotEmpty())
+            }
+        }
     }
 }

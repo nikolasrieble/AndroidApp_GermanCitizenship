@@ -1,27 +1,16 @@
 package com.nrieble.quizapp.domain
 
-import android.content.Context
-import androidx.room.Room
-import com.nrieble.quizapp.database.*
+import com.nrieble.quizapp.database.AnswerDAO
+import com.nrieble.quizapp.database.QuestionDAO
 
 class QuizItemRepository(
-    context: Context
-
+    private val questionDAO: QuestionDAO,
+    private val answerDAO: AnswerDAO
 ) {
-    private val quizDatabase = Room.databaseBuilder(
-        context,
-        QuizDatabase::class.java,
-        "quizDatabase.db"
-    )
-        .createFromAsset("AllGermanCitizenshipV2.db")
-        .build()
-    private val questionDAO: QuestionDAO = quizDatabase.questionDao()
-    private val answerDAO: AnswerDAO = quizDatabase.answerDao()
-
-    fun getCategories(): List<String?> =
+    suspend fun getCategories(): List<String?> =
         questionDAO.getAll().map { it.category }
 
-    fun getQuizItems(): List<QuizItem> {
+    suspend fun getQuizItems(): List<QuizItem> {
         val questions = questionDAO.getAll()
         val answers = answerDAO.getAll()
 

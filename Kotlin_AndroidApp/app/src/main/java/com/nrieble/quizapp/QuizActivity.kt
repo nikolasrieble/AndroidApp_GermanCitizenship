@@ -8,15 +8,20 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.nrieble.quizapp.database.QuizDatabase
 import com.nrieble.quizapp.domain.QuizItem
 import com.nrieble.quizapp.domain.Quiz
 import com.nrieble.quizapp.domain.QuizItemRepository
 import kotlinx.android.synthetic.main.activity_quiz.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class QuizActivity : AppCompatActivity() {
     val EXTRA_SCORE = "extraScore"
 
     // database
+    private val quizDatabase = QuizDatabase.getInstance(this)
     private lateinit var currentQuizItem: QuizItem
     private lateinit var quiz: Quiz
 
@@ -31,12 +36,17 @@ class QuizActivity : AppCompatActivity() {
         AnswerRecyclerView.layoutManager = LinearLayoutManager(this)
         confirm_answer.setOnClickListener { proceed() }
         // get content
-        quiz = loadQuiz()
-        showNextQuestion()
+        CoroutineScope(Dispatchers.Main).launch {
+            quiz = loadQuiz()
+            showNextQuestion()
+        }
     }
 
-    private fun loadQuiz(): Quiz {
-        val repository = QuizItemRepository(context = this)
+    private suspend fun loadQuiz(): Quiz {
+        val repository = QuizItemRepository(
+            quizDatabase.questionDao(),
+            quizDatabase.answerDao()
+        )
         return Quiz(repository.getQuizItems())
     }
 
