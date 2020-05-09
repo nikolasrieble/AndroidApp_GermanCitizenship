@@ -8,7 +8,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.nrieble.quizapp.database.QuizDatabase
+import com.nrieble.quizapp.persistence.QuizDatabase
 import com.nrieble.quizapp.domain.QuizItem
 import com.nrieble.quizapp.domain.Quiz
 import com.nrieble.quizapp.domain.QuizItemRepository

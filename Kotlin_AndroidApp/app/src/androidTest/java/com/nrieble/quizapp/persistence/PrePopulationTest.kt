@@ -1,7 +1,6 @@
-package com.nrieble.quizapp.database
+package com.nrieble.quizapp.persistence
 
 import android.content.Context
-import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.runner.AndroidJUnit4
 import kotlinx.coroutines.CoroutineScope

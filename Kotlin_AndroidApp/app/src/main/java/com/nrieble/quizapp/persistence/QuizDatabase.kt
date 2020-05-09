@@ -1,4 +1,4 @@
-package com.nrieble.quizapp.database
+package com.nrieble.quizapp.persistence
 
 
 import android.content.Context
@@ -27,10 +27,6 @@ abstract class QuizDatabase : RoomDatabase() {
                     .build()
             }
             return INSTANCE!!
-        }
-
-        fun destroyInstance() {
-            INSTANCE = null
         }
     }
 

@@ -1,7 +1,7 @@
 package com.nrieble.quizapp.domain
 
-import com.nrieble.quizapp.database.AnswerDAO
-import com.nrieble.quizapp.database.QuestionDAO
+import com.nrieble.quizapp.persistence.AnswerDAO
+import com.nrieble.quizapp.persistence.QuestionDAO
 
 class QuizItemRepository(
     private val questionDAO: QuestionDAO,

@@ -1,8 +1,7 @@
 package com.nrieble.quizapp.domain
 
-import androidx.lifecycle.LiveData
-import com.nrieble.quizapp.database.Answer
-import com.nrieble.quizapp.database.Question
+import com.nrieble.quizapp.persistence.Answer
+import com.nrieble.quizapp.persistence.Question
 
 class QuizItem(val question: Question,
                val answers: List<Answer>) {

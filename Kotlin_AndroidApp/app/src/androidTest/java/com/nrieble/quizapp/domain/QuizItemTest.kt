@@ -1,9 +1,7 @@
 package com.nrieble.quizapp.domain
 
-import com.nrieble.quizapp.database.Answer
-import com.nrieble.quizapp.database.Question
-import org.junit.Assert.*
-import org.junit.Test
+import com.nrieble.quizapp.persistence.Answer
+import com.nrieble.quizapp.persistence.Question
 
 class QuizItemTest{
     val question = Question(1,"cat", "What is this?", "None")

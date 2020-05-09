@@ -1,8 +1,7 @@
-package com.nrieble.quizapp.database
+package com.nrieble.quizapp.persistence
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 
 @Entity
@@ -22,11 +21,4 @@ data class Answer(
     @ColumnInfo(name = "QuestionID")
     val questionId: Int?
 
-) {
-    fun isValid(): Boolean {
-        return id != null &&
-                truth != null &&
-                text != null &&
-                questionId != null
-    }
-}
+)
