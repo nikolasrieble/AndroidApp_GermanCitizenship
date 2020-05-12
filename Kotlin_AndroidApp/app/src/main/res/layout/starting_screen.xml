@@ -26,12 +26,24 @@
         android:textSize="20sp" />
 
     <Button
-        android:id="@+id/button_start_quiz"
+        android:id="@+id/button_start_practice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/text_view_highscore"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="60dp"
-        android:text="Start" />
+        android:text="Practice" />
+
+    <Button
+        android:id="@+id/button_start_test"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/button_start_practice"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="160dp"
+        android:layout_marginTop="60dp"
+        android:layout_marginEnd="160dp"
+        android:text="Practice" />
 
 </RelativeLayout>

@@ -3,10 +3,15 @@ package com.nrieble.quizapp.domain
 import androidx.lifecycle.LiveData
 
 class Quiz(
-    private val quizItems: List<QuizItem>
+    val quizItems: List<QuizItem>
 ) : LiveData<QuizItem>() {
-    val size = quizItems.size
     var state = QuizState()
+    val size = quizItems.size
+
+    fun answer(item: QuizItem) {
+        this.state.score += item.score()
+        item.state = QuizItem.AnswerState.REVIEW
+    }
 
     fun getNextQuestion(): QuizItem {
         updateQuestionIndex(1)
@@ -26,14 +31,14 @@ class Quiz(
             else -> nextIndexCandidate
         }
     }
+}
 
-    fun answer(quizItem: QuizItem) {
-        this.state.score += quizItem.score()
-        quizItem.state = QuizItem.AnswerState.REVIEW
-    }
+class QuizState {
+    var questionIndex: Int = 0
+    var score: Float = 0.0F
+}
 
-    class QuizState {
-        var questionIndex: Int = 0
-        var score: Float = 0.0F
-    }
+enum class QuizType {
+    TEST,
+    PRACTICE
 }

@@ -8,10 +8,11 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.nrieble.quizapp.domain.Quiz
 import com.nrieble.quizapp.persistence.QuizDatabase
 import com.nrieble.quizapp.domain.QuizItem
-import com.nrieble.quizapp.domain.Quiz
-import com.nrieble.quizapp.domain.QuizItemRepository
+import com.nrieble.quizapp.domain.QuizService
+import com.nrieble.quizapp.domain.QuizType
 import kotlinx.android.synthetic.main.activity_quiz.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -35,19 +36,24 @@ class QuizActivity : AppCompatActivity() {
         setContentView(R.layout.activity_quiz)
         AnswerRecyclerView.layoutManager = LinearLayoutManager(this)
         confirm_answer.setOnClickListener { proceed() }
+        val quizType = QuizType.valueOf(intent.extras?.get("TYPE").toString())
         // get content
         CoroutineScope(Dispatchers.Main).launch {
-            quiz = loadQuiz()
+            quiz = loadQuiz(quizType)
             showNextQuestion()
         }
     }
 
-    private suspend fun loadQuiz(): Quiz {
-        val repository = QuizItemRepository(
+    private suspend fun loadQuiz(type: QuizType?): Quiz {
+        val repository = QuizService(
             quizDatabase.questionDao(),
             quizDatabase.answerDao()
         )
-        return Quiz(repository.getQuizItems())
+        return when(type){
+            QuizType.TEST -> repository.getTest("Bayern")
+            else -> repository.getPractice()
+        }
+
     }
 
     private fun proceed() {

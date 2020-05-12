@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.nrieble.quizapp.domain.QuizType
 import com.nrieble.quizapp.persistence.QuizDatabase
 import kotlinx.android.synthetic.main.starting_screen.*
 
@@ -20,13 +21,15 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.starting_screen)
         loadHighscore()
-        button_start_quiz.setOnClickListener { startQuiz() }
+        button_start_practice.setOnClickListener{startQuiz(QuizType.PRACTICE)}
+        button_start_test.setOnClickListener{startQuiz(QuizType.TEST)}
     }
 
-    private fun startQuiz() {
+    private fun startQuiz(type: QuizType) {
         // prepopulation
         QuizDatabase.getInstance(this)
         val intent = Intent(this, QuizActivity::class.java)
+        intent.putExtra("TYPE", type)
         startActivityForResult(intent, REQUEST_CODE_QUIZ)
     }
 

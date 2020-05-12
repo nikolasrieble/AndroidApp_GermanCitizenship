@@ -17,7 +17,6 @@ abstract class QuizDatabase : RoomDatabase() {
     abstract fun answerDao(): AnswerDAO
 
     companion object {
-
         private var INSTANCE: QuizDatabase? = null
 
         fun getInstance(context: Context): QuizDatabase {
