@@ -49,7 +49,7 @@ class QuizActivity : AppCompatActivity() {
             quizDatabase.questionDao(),
             quizDatabase.answerDao()
         )
-        return when(type){
+        return when (type) {
             QuizType.TEST -> repository.getTest("Bayern")
             else -> repository.getPractice()
         }
@@ -108,7 +108,7 @@ class QuizActivity : AppCompatActivity() {
         } else imageView.setImageDrawable(null)
 
         // update counter
-        text_view_count.text = "Question: ${quiz.state.questionIndex + 1}/${quiz.size}"
+        text_view_count.text = quiz.progress
     }
 
     private fun checkAnswer() {
@@ -117,7 +117,7 @@ class QuizActivity : AppCompatActivity() {
 
         AnswerRecyclerView.adapter = AnswerAdapter(this.currentQuizItem, this)
 
-        text_view_score.text = "Score: ${quiz.state.score}"
+        text_view_score.text = quiz.score
     }
 
     private fun finishQuiz() {

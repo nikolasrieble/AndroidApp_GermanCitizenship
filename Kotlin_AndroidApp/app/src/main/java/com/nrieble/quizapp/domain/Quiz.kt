@@ -8,6 +8,9 @@ class Quiz(
     var state = QuizState()
     val size = quizItems.size
 
+    val progress = "Question: ${state.questionIndex + 1}/${size}"
+    val score = "Score: ${state.score}"
+
     fun answer(item: QuizItem) {
         this.state.score += item.score()
         item.state = QuizItem.AnswerState.REVIEW
